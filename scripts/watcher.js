@@ -4,6 +4,9 @@ console.log('');
 const Web3 = require('web3');
 const providerUrl = 'ws://localhost:9541';
 const web3 = new Web3(new Web3.providers.WebsocketProvider(providerUrl));
+const web3_0 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:9540'));
+const SnS = require('../utils/signAndSendTx.js');
+const getLatestBlock = require('../utils/getLatestBlock');
 
 const artifactsPath = '../posdao-contracts/build/contracts/';
 const blockRewardContract = new web3.eth.Contract(
@@ -180,6 +183,104 @@ async function onNewBlock(blockNumber) {
     console.log('');
   }
 
+  //////////////////////////////////////////////////////////////////////////////
+  if (blockNumber == 12) {
+    // Legacy send to EOA
+    web3.eth.sendTransaction({
+      from: '0x32e4e4c7c5d1cea5db5f9202a9e4d99e56c91a24',
+      to: '0xf67cc5231c5858ad6cc87b105217426e17b824bb',
+      value: web3.utils.numberToHex('100'),
+      gasPrice: web3.utils.numberToHex('2000000000'),
+      gas: web3.utils.numberToHex('21000')
+    });
+  } else if (blockNumber == 16) {
+    // Legacy send to contract
+    web3.eth.sendTransaction({
+      from: '0x32e4e4c7c5d1cea5db5f9202a9e4d99e56c91a24',
+      to: stakingContract.options.address,
+      gasPrice: web3.utils.numberToHex('2000000000'),
+      gas: web3.utils.numberToHex('100000'),
+      data: stakingContract.methods.setDelegatorMinStake('1000000000000000000000').encodeABI()
+    });
+  } else if (blockNumber == 20) {
+    // Send to EOA
+    web3.eth.sendTransaction({
+      from: '0x32e4e4c7c5d1cea5db5f9202a9e4d99e56c91a24',
+      to: '0xf67cc5231c5858ad6cc87b105217426e17b824bb',
+      value: web3.utils.numberToHex('100'),
+      maxPriorityFeePerGas: web3.utils.numberToHex('2000000000'),
+      maxFeePerGas: web3.utils.numberToHex('2000000000'),
+      gas: web3.utils.numberToHex('21000'),
+      type: '0x2'
+    });
+  } else if (blockNumber == 24) {
+    // Send to contract
+    web3.eth.sendTransaction({
+      from: '0x32e4e4c7c5d1cea5db5f9202a9e4d99e56c91a24',
+      to: stakingContract.options.address,
+      maxPriorityFeePerGas: web3.utils.numberToHex('1500000000'),
+      maxFeePerGas: web3.utils.numberToHex('2000000000'),
+      gas: web3.utils.numberToHex('100000'),
+      data: stakingContract.methods.setDelegatorMinStake('1000000000000000000000').encodeABI(),
+      type: '0x2'
+    });
+  } else if (blockNumber == 28) {
+    // Legacy EIP-3198
+    web3.eth.sendTransaction({
+      from: '0x32e4e4c7c5d1cea5db5f9202a9e4d99e56c91a24',
+      gasPrice: web3.utils.numberToHex('2000000000'),
+      gas: web3.utils.numberToHex('1000000'),
+      data: '0x6080604052348015600f57600080fd5b5048600055603e8060216000396000f3fe6080604052600080fdfea265627a7a723058200aed9dd22e8ad3510c5ac4ec4252ada68bc2eb4ed687b4f37ac0964e5853206f64736f6c634300050a0032'
+    });
+  } else if (blockNumber == 32) {
+    // Legacy EIP-3541
+    web3.eth.sendTransaction({
+      from: '0x32e4e4c7c5d1cea5db5f9202a9e4d99e56c91a24',
+      gasPrice: web3.utils.numberToHex('2000000000'),
+      gas: web3.utils.numberToHex('1000000'),
+      data: '0x60ef60005360206000f3'
+    });
+  } else if (blockNumber == 36) {
+    // eth_sendRawTransaction (legacy send to EOA)
+    SnS(web3_0, {
+      from: '0x32e4e4c7c5d1cea5db5f9202a9e4d99e56c91a24',
+      to: '0xf67cc5231c5858ad6cc87b105217426e17b824bb',
+      value: web3.utils.numberToHex('100'),
+      gasPrice: '2000000000',
+      gasLimit: '21000'
+    });
+  } else if (blockNumber == 40) {
+    // eth_sendRawTransaction (legacy send to contract)
+    SnS(web3_0, {
+      from: '0x32e4e4c7c5d1cea5db5f9202a9e4d99e56c91a24',
+      to: stakingContract.options.address,
+      gasPrice: '2000000000',
+      gasLimit: web3.utils.numberToHex('100000'),
+      method: stakingContract.methods.setDelegatorMinStake('1000000000000000000000')
+    });
+  } else if (blockNumber == 44) {
+    // eth_sendRawTransaction (send to EOA)
+    const latestBlock = await getLatestBlock(web3);
+    SnS(web3_0, {
+      from: '0x32e4e4c7c5d1cea5db5f9202a9e4d99e56c91a24',
+      to: '0xf67cc5231c5858ad6cc87b105217426e17b824bb',
+      value: web3.utils.numberToHex('100'),
+      gasPrice: '1000000000', // maxPriorityFeePerGas for EIP-1559, maxFeePerGas is calculated as baseFeePerGas + maxPriorityFeePerGas
+      gasLimit: web3.utils.numberToHex('21000')
+    }, null, latestBlock.baseFeePerGas);
+  } else if (blockNumber == 48) {
+    // eth_sendRawTransaction (send to contract)
+    const latestBlock = await getLatestBlock(web3);
+    SnS(web3_0, {
+      from: '0x32e4e4c7c5d1cea5db5f9202a9e4d99e56c91a24',
+      to: stakingContract.options.address,
+      gasPrice: '1000000000', // maxPriorityFeePerGas for EIP-1559, maxFeePerGas is calculated as baseFeePerGas + maxPriorityFeePerGas
+      gasLimit: web3.utils.numberToHex('100000'),
+      method: stakingContract.methods.setDelegatorMinStake('1000000000000000000000')
+    }, null, latestBlock.baseFeePerGas);
+  }
+  //////////////////////////////////////////////////////////////////////////////
+
   console.log('');
   console.log('=======================================================');
   console.log('');
@@ -208,4 +309,8 @@ async function scanForNewBlock() {
   } else {
     prevBlock = null;
   }
+}
+
+function sleep(millis) {
+  return new Promise(resolve => setTimeout(resolve, millis));
 }
