@@ -19,7 +19,7 @@ return new Promise((resolve, reject) => {
 	  if (resp.hasOwnProperty('result')) {
 		resolve(resp.result);
 	  } else {
-		reject(new Error('result is undefined'));
+        reject(new Error(`JSON RPC result is undefined. Response text: ${exec.stdout}`));
 	  }
 	});
   })
