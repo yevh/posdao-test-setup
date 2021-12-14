@@ -163,6 +163,7 @@ async function onNewBlock(blockNumber) {
       }
       console.log(`  ${tx.from} => ${contractName} (${tx.hash})`);
       console.log(`    gas used: ${tx.receipt.gasUsed}/${tx.gasLimit}, gas price: ${tx.gasPrice}, nonce: ${tx.nonce}, index: ${tx.receipt.transactionIndex}`);
+      console.log(`    hash: ${tx.hash}`);
     });
     console.log('');
   }
@@ -176,6 +177,7 @@ async function onNewBlock(blockNumber) {
       }
       console.log(`  ${tx.from} => ${contractName} (${tx.hash})`);
       console.log(`    gas used: ${tx.receipt.gasUsed}/${tx.gasLimit}, gas price: ${tx.gasPrice}, nonce: ${tx.nonce}, index: ${tx.receipt.transactionIndex}`);
+      console.log(`    hash: ${tx.hash}`);
     });
     console.log('');
   }
