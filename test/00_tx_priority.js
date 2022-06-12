@@ -1,4 +1,3 @@
-/*
 const fs = require('fs');
 const Web3 = require('web3');
 const web3 = new Web3('http://localhost:8641');
@@ -55,25 +54,34 @@ describe('TxPriority tests', () => {
         // Set minter address to be able to mint coins through the BlockReward
         method: BlockRewardAuRa.instance.methods.setErcToNativeBridgesAllowed,
         arguments: [[OWNER]],
-        params: { from: OWNER, gasPrice: gasPrice0, nonce: ownerNonce++ }
+        params: { from: OWNER, gasPrice: gasPrice0, nonce: ownerNonce++ },
+        meta: "setErcToNativeBridgesAllowed"
       }, {
         // Mint coins for the owner
         method: BlockRewardAuRa.instance.methods.addExtraReceiver,
         arguments: [web3.utils.toWei('100'), OWNER],
-        params: { from: OWNER, gasPrice: gasPrice0, nonce: ownerNonce++ }
+        params: { from: OWNER, gasPrice: gasPrice0, nonce: ownerNonce++ },
+        meta: "addExtraReceiver"
       }, {
         // Mint coins for the arbitrary account
         method: BlockRewardAuRa.instance.methods.addExtraReceiver,
         arguments: [web3.utils.toWei('100'), account.address],
-        params: { from: OWNER, gasPrice: gasPrice0, nonce: ownerNonce++ }
+        params: { from: OWNER, gasPrice: gasPrice0, nonce: ownerNonce++ },
+        meta: "addExtraReceiver"
       }, {
         // Mint coins for the arbitrary account2
         method: BlockRewardAuRa.instance.methods.addExtraReceiver,
         arguments: [web3.utils.toWei('100'), account2.address],
-        params: { from: OWNER, gasPrice: gasPrice0, nonce: ownerNonce++ }
+        params: { from: OWNER, gasPrice: gasPrice0, nonce: ownerNonce++ },
+        meta: "addExtraReceiver"
       }];
+      console.log("sending transactions")
       const { receipts } = await batchSendTransactions(transactions);
-      const allTxSucceeded = receipts.reduce((acc, receipt) => acc && receipt.status, true);
+      console.log("transactions sent")
+      const allTxSucceeded = receipts.reduce((acc, receipt) => {
+        console.log(receipt.status);
+        return acc && receipt.status
+      }, true);
       expect(allTxSucceeded, `Cannot mint coins for the owner and an arbitrary account`).to.equal(true);
     }
   });
@@ -2172,8 +2180,10 @@ describe('TxPriority tests', () => {
           delete params.nonce;
           item.method(...arguments).estimateGas(params, async (err, gas) => {
             if (err) {
+              console.log(`Error estimating gas for ${JSON.stringify(item)}`, err);
               reject(err);
             } else {
+              console.log(`Estimated gas for ${JSON.stringify(item)}`, gas);
               resolve(gas);
             }
           });
@@ -2182,9 +2192,13 @@ describe('TxPriority tests', () => {
         promises.push(null);
       }
     });
+    console.log(`Estimating gas for ${transactions.length} transactions`);
     const gas = await Promise.all(promises);
+    console.log(`Estimated gas for ${transactions.length} transactions`);
 
+    console.log(`Sending ${transactions.length} transactions`);
     const receipts = await executeTransactions(transactions, gas, receiptsExpected, web3Local);
+    console.log(`Sent ${transactions.length} transactions`);
 
     if (ensureSingleBlock && transactions.length > 0) {
       // Ensure the transactions were mined in the same block
@@ -2487,4 +2501,3 @@ async function saveConfigFile(config, nodeNumber) {
 async function sleep(ms) {
   await new Promise(r => setTimeout(r, ms));
 }
-*/
