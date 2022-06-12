@@ -1,4 +1,3 @@
-/*
 const fs = require('fs');
 const Web3 = require('web3');
 const web3 = new Web3('http://localhost:8641');
@@ -2487,4 +2486,3 @@ async function saveConfigFile(config, nodeNumber) {
 async function sleep(ms) {
   await new Promise(r => setTimeout(r, ms));
 }
-*/
