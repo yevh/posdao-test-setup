@@ -27,6 +27,7 @@ accounts/keystore/*
 
 
 # Logs
+/posdao-logs
 /data/node[0-9]*/network/
 /data/node[0-9]*/chains/
 /data/node[0-9]*/log
