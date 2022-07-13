@@ -28,7 +28,7 @@ if [[ -d ./bc/launcher ]]; then
     docker-compose stop validator
     docker-compose stop node3
     docker-compose stop node2
-    docker-compose stop node
+    docker-compose stop node1
     docker-compose down
     cd -
     # docker image rm sigp/lighthouse:v2.2.1-modern
