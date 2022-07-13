@@ -1733,6 +1733,7 @@ describe('TxPriority tests', () => {
   });
   */
 
+  /*
   it('Test different rules on different validators', async function() {
     const node1 = 1;
     const node2 = 2;
@@ -1902,6 +1903,7 @@ describe('TxPriority tests', () => {
       }
     }
   });
+  */
 
   it('Local rules should rewrite TxPriority contract rules', async function() {
     // Set rules in TxPriority contract
