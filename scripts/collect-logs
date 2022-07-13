@@ -1,0 +1,19 @@
+#!/bin/bash
+
+TIMESTAMP=$(date +"%y%m%d_%H%M%S")
+LOGS_DIR="posdao-logs/$TIMESTAMP"
+
+mkdir -p $LOGS_DIR
+
+function collect_neth_log() {
+    echo "Collecting logs from neth node $1"
+    NETH_LOG="./data/node$1/nethermind.logs.txt"
+    if [ -f "$NETH_LOG" ]; then
+        cp "$NETH_LOG" "$LOGS_DIR/neth-node$1.logs.txt"
+    fi
+}
+
+# Kill test nodes.
+for i in $(seq 0 6); do
+    collect_neth_log $i
+done
