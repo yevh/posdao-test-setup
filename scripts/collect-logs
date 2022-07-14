@@ -1,7 +1,7 @@
 #!/bin/bash
 
 TIMESTAMP=$(date +"%y%m%d_%H%M%S")
-LOGS_DIR="posdao-logs/$TIMESTAMP"
+LOGS_DIR="$PWD/posdao-logs/$TIMESTAMP"
 
 mkdir -p $LOGS_DIR
 
