@@ -53,7 +53,7 @@ describe('BlockReward tests', () => {
     do {
       await sleep(3500);
       block = await web3.eth.getBlock('latest');
-      console.log('    Current block ${block.number} total difficulty: ${block.difficulty}');
+      console.log(`    Current block ${block.number} total difficulty: ${block.totalDifficulty}`);
     } while (block.step || !block.mixHash);
 
     console.log('    TTD is reached. Checking BlockReward feature ...');
