@@ -14,7 +14,7 @@ async function main() {
   if (os.platform() === 'linux') {
     const dockerComposeYmlPath = `${launcherDir}/docker-compose.yml`;
     let dockerComposeYmlContent = fs.readFileSync(dockerComposeYmlPath, 'utf8');
-    dockerComposeYmlContent = dockerComposeYmlContent.replace('node:', `node:
+    dockerComposeYmlContent = dockerComposeYmlContent.replace('node1:', `node1:
     extra_hosts:
       - "host.docker.internal:host-gateway"`);
     dockerComposeYmlContent = dockerComposeYmlContent.replace('node2:', `node2:
