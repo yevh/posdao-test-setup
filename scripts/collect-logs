@@ -1,7 +1,7 @@
 #!/bin/bash
 
-TIMESTAMP=$(date +"%y%m%d_%H%M%S")
-LOGS_DIR="$PWD/posdao-logs/$TIMESTAMP"
+TIMESTAMP="$(date +"%y%m%d_%H%M%S")"
+LOGS_DIR="$PWD/posdao-logs"
 
 mkdir -p $LOGS_DIR
 
@@ -9,13 +9,13 @@ function collect_neth_log() {
     NETH_LOG="./data/node$1/nethermind.logs.txt"
     if [ -f "$NETH_LOG" ]; then
         echo "Collecting logs from neth node $1"
-        cp "$NETH_LOG" "$LOGS_DIR/neth-node$1.logs.txt"
+        cp "$NETH_LOG" "$LOGS_DIR/$TIMESTAMP/neth-node$1.logs.txt"
     fi
 }
 
 function collect_lh_log() {
     echo "Collecting logs from lighthouse $1"
-    (cd bc/launcher && docker-compose logs $1 > "$LOGS_DIR/lh-$1.logs.txt")
+    (cd bc/launcher && docker-compose logs $1 > "$LOGS_DIR/$TIMESTAMP/lh-$1.logs.txt")
 }
 
 for i in $(seq 0 3); do
@@ -28,3 +28,5 @@ if [[ -d ./bc/launcher ]]; then
         collect_lh_log "node$i"
     done
 fi
+
+ln -fs "$TIMESTAMP" "$LOGS_DIR/latest"
