@@ -1,15 +1,15 @@
 #!/bin/bash
 
-TIMESTAMP=$(date +"%y%m%d_%H%M%S")
-LOGS_DIR="$PWD/posdao-logs/$TIMESTAMP"
+TIMESTAMP="$(date +"%y%m%d_%H%M%S")"
+LOGS_DIR="$PWD/posdao-logs"
 
-mkdir -p $LOGS_DIR
+mkdir -p "$LOGS_DIR/$TIMESTAMP"
 
 function collect_neth_log() {
-    echo "Collecting logs from neth node $1"
     NETH_LOG="./data/node$1/nethermind.logs.txt"
     if [ -f "$NETH_LOG" ]; then
-        cp "$NETH_LOG" "$LOGS_DIR/neth-node$1.logs.txt"
+        echo "Collecting logs from neth node $1"
+        cp "$NETH_LOG" "$LOGS_DIR/$TIMESTAMP/neth-node$1.logs.txt"
     fi
 }
 
@@ -17,3 +17,5 @@ function collect_neth_log() {
 for i in $(seq 0 6); do
     collect_neth_log $i
 done
+
+ln -fs "$TIMESTAMP" "$LOGS_DIR/latest"
