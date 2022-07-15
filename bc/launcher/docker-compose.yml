@@ -67,6 +67,8 @@ services:
       --port 13003
       --eth1-endpoints http://host.docker.internal:8743,http://host.docker.internal:8740
       --datadir /home/.eth2/beaconchaindata
+      --http-address 0.0.0.0
+      --http-port 5053
       --disable-upnp
       --disable-discovery
       --debug-level debug
