@@ -3,7 +3,7 @@
 TIMESTAMP="$(date +"%y%m%d_%H%M%S")"
 LOGS_DIR="$PWD/posdao-logs"
 
-mkdir -p $LOGS_DIR
+mkdir -p "$LOGS_DIR/$TIMESTAMP"
 
 function collect_neth_log() {
     NETH_LOG="./data/node$1/nethermind.logs.txt"
