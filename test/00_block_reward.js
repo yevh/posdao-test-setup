@@ -48,11 +48,12 @@ describe('BlockReward tests', () => {
 
     expect(await web3.eth.getBalance(testAddress) === '0', 'The balance of the test address must be zero').to.equal(true);
 
-    console.log('    Waiting for the merge transition ...');
+    console.log('    Waiting for the merge transition (TTD 44236707699722000250238698966129867489020)...');
 
     do {
       await sleep(3500);
       block = await web3.eth.getBlock('latest');
+      console.log(`    Current block ${block.number} total difficulty: ${block.totalDifficulty}`);
     } while (block.step || !block.mixHash);
 
     console.log('    TTD is reached. Checking BlockReward feature ...');

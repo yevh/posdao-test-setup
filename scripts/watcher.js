@@ -86,6 +86,7 @@ async function onNewBlock(blockNumber) {
   console.log(`  Gas limit: ${block.gasLimit}`);
   console.log(`  Validator: ${block.miner}`);
   console.log(`  Total Difficulty: ${block.totalDifficulty}`);
+  console.log(`  Base Fee:  ${web3.utils.hexToNumber(block.baseFeePerGas)}`);
   if (prevBlock) {
     console.log(`  Timestamp delta from prevBlock: ${block.timestamp - prevBlock.timestamp}`);
   }
