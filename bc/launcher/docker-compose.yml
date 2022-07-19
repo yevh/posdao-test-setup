@@ -94,12 +94,12 @@ services:
     command: |
       lighthouse validator_client
       --testnet-dir /root/sbc/config
-      --validators-dir /root/sbc/validators
+      --validators-dir /var/lib/lighthouse/validators/
       --beacon-nodes http://node1:5051
       --graffiti-file /root/sbc/config/graffiti.yml
     volumes:
       - ./config:/root/sbc/config
-      - ./validators/validator1:/root/sbc/validators
+      - ./validators/validator1:/var/lib/lighthouse/validators/
     logging:
       driver: "json-file"
       options:
@@ -114,12 +114,12 @@ services:
     command: |
       lighthouse validator_client
       --testnet-dir /root/sbc/config
-      --validators-dir /root/sbc/validators
+      --validators-dir /var/lib/lighthouse/validators/
       --beacon-nodes http://node2:5052
       --graffiti-file /root/sbc/config/graffiti.yml
     volumes:
       - ./config:/root/sbc/config
-      - ./validators/validator2:/root/sbc/validators
+      - ./validators/validator2:/var/lib/lighthouse/validators/
     logging:
       driver: "json-file"
       options:
@@ -134,12 +134,12 @@ services:
     command: |
       lighthouse validator_client
       --testnet-dir /root/sbc/config
-      --validators-dir /root/sbc/validators
+      --validators-dir /var/lib/lighthouse/validators/
       --beacon-nodes http://node3:5053
       --graffiti-file /root/sbc/config/graffiti.yml
     volumes:
       - ./config:/root/sbc/config
-      - ./validators/validator3:/root/sbc/validators
+      - ./validators/validator3:/var/lib/lighthouse/validators/
     logging:
       driver: "json-file"
       options:
