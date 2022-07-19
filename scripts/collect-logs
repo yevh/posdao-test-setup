@@ -29,4 +29,4 @@ if [[ -d ./bc/launcher ]]; then
     done
 fi
 
-ln -fs "$TIMESTAMP" "$LOGS_DIR/latest"
+rm "$LOGS_DIR/latest" && ln -s "$TIMESTAMP" "$LOGS_DIR/latest"
