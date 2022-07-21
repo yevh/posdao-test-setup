@@ -1733,7 +1733,6 @@ describe('TxPriority tests', () => {
   });
   */
 
-  /*
   it('Test different rules on different validators', async function() {
     const node1 = 1;
     const node2 = 2;
@@ -1810,7 +1809,11 @@ describe('TxPriority tests', () => {
     // Ensure the transactions were mined by the node2
     let block = await web3.eth.getBlock(receipts.receiptsInSingleBlock[0].blockNumber);
     expect(block.miner.toLowerCase(), 'Unexpected validator mined the transactions').to.equal(
-      JSON.parse(fs.readFileSync(`${__dirname}/../config/node2.nethermind.json`, 'utf8')).KeyStore.BlockAuthorAccount.toLowerCase()
+      // this is pre-merge
+      // JSON.parse(fs.readFileSync(`${__dirname}/../config/node2.nethermind.json`, 'utf8')).KeyStore.BlockAuthorAccount.toLowerCase()
+
+      // this is post-merge (set in bc/launcher/docker-compose.yml)
+      "0x0000000000000000000000000000000000000002"
     );
 
     // To make only node3 mine these transactions, we need to temporarily
@@ -1875,11 +1878,17 @@ describe('TxPriority tests', () => {
       console.log(block);
     }
     expect(block.miner.toLowerCase(), 'Unexpected validator mined the transactions').to.equal(
-      JSON.parse(fs.readFileSync(`${__dirname}/../config/node3.nethermind.json`, 'utf8')).KeyStore.BlockAuthorAccount.toLowerCase()
+      // this is pre-merge
+      // JSON.parse(fs.readFileSync(`${__dirname}/../config/node3.nethermind.json`, 'utf8')).KeyStore.BlockAuthorAccount.toLowerCase()
+
+      // this is post-merge (set in bc/launcher/docker-compose.yml)
+      "0x0000000000000000000000000000000000000003"
     );
 
     // Clear the rules for all nodes
     await clearLocalRules();
+
+    /* this doesn't make sense post-merge
 
     // Check for the next 10 AuRa rounds to ensure the validators
     // didn't go out of consensus
@@ -1902,8 +1911,9 @@ describe('TxPriority tests', () => {
         prevIndex = currentIndex;
       }
     }
+
+    */
   });
-  */
 
   it('Local rules should rewrite TxPriority contract rules', async function() {
     // Set rules in TxPriority contract
@@ -2039,9 +2049,11 @@ describe('TxPriority tests', () => {
     await clearLocalRules();
   });
 
+  /* doesn't make sense post-merge
   it('Finish', async function() {
     await waitForNextStakingEpoch(web3);
   });
+  */
 
   async function applyPriorityRules(type, rules, onlySpecifiedNode) {
     if (!rules || !rules.length) return;
@@ -2393,7 +2405,7 @@ describe('TxPriority tests', () => {
             let attempts = 0;
             let receipt = null;
             // Wait for the receipt during 30 seconds
-            while (receipt == null && attempts++ <= 60 && receiptsReceived < receiptsExpected) {
+            while (receipt == null && attempts++ <= 5*120 && receiptsReceived < receiptsExpected) {
               await sleep(500);
               receipt = await web3Local.eth.getTransactionReceipt(txHash);
               if (receipt) receiptsReceived++;

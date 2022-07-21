@@ -11,6 +11,9 @@ describe('Block hash test', () => {
     // Make sure the merge is in the past
     expect(!block.step && !!block.mixHash, 'It seems the merge has not happened yet').to.equal(true);
 
+    // wait a second for the block to propagate
+    await sleep(1000)
+
     const block2 = await web3_2.eth.getBlock(block.number);
     const block3 = await web3_3.eth.getBlock(block.number);
 
@@ -18,3 +21,7 @@ describe('Block hash test', () => {
     expect(block.hash === block3.hash, 'node and node3 have different block hashes').to.equal(true);
   });
 });
+
+async function sleep(ms) {
+  await new Promise(r => setTimeout(r, ms));
+}
