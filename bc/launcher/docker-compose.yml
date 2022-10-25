@@ -1,13 +1,14 @@
 version: '3.8'
 services:
   node1:
-    image: sigp/lighthouse:v2.2.1-modern
+    image: sigp/lighthouse
     hostname: node1
     command: |
       lighthouse beacon_node
       --testnet-dir /root/sbc/config
       --port 13001
-      --eth1-endpoints http://host.docker.internal:8741,http://host.docker.internal:8740
+      --execution-endpoint http://host.docker.internal:8741
+      --execution-jwt /root/jwtsecret
       --datadir /home/.eth2/beaconchaindata
       --http-address 0.0.0.0
       --http-port 5051
@@ -22,6 +23,7 @@ services:
       - '13001:13001'
       - '5051:5051'
     volumes:
+      - ./jwtsecret:/root/jwtsecret
       - ./config:/root/sbc/config
       - ./node_db:/home/.eth2/beaconchaindata
     logging:
@@ -30,13 +32,14 @@ services:
         max-size: "100m"
         max-file: "1"
   node2:
-    image: sigp/lighthouse:v2.2.1-modern
+    image: sigp/lighthouse
     hostname: node2
     command: |
       lighthouse beacon_node
       --testnet-dir /root/sbc/config
       --port 13002
-      --eth1-endpoints http://host.docker.internal:8742,http://host.docker.internal:8740
+      --execution-endpoint http://host.docker.internal:8742
+      --execution-jwt /root/jwtsecret
       --datadir /home/.eth2/beaconchaindata
       --http-address 0.0.0.0
       --http-port 5052
@@ -51,6 +54,7 @@ services:
       - '13002:13002'
       - '5052:5052'
     volumes:
+      - ./jwtsecret:/root/jwtsecret
       - ./config2:/root/sbc/config
       - ./node2_db:/home/.eth2/beaconchaindata
     logging:
@@ -59,13 +63,14 @@ services:
         max-size: "100m"
         max-file: "1"
   node3:
-    image: sigp/lighthouse:v2.2.1-modern
+    image: sigp/lighthouse
     hostname: node3
     command: |
       lighthouse beacon_node
       --testnet-dir /root/sbc/config
       --port 13003
-      --eth1-endpoints http://host.docker.internal:8743,http://host.docker.internal:8740
+      --execution-endpoint http://host.docker.internal:8743
+      --execution-jwt /root/jwtsecret
       --datadir /home/.eth2/beaconchaindata
       --http-address 0.0.0.0
       --http-port 5053
@@ -80,6 +85,7 @@ services:
       - '13003:13003'
       - '5053:5053'
     volumes:
+      - ./jwtsecret:/root/jwtsecret
       - ./config3:/root/sbc/config
       - ./node3_db:/home/.eth2/beaconchaindata
     logging:
@@ -88,7 +94,7 @@ services:
         max-size: "100m"
         max-file: "1"
   validator1:
-    image: sigp/lighthouse:v2.2.1-modern
+    image: sigp/lighthouse
     hostname: validator
     depends_on:
       - node1
@@ -108,7 +114,7 @@ services:
         max-file: "1"
 
   validator2:
-    image: sigp/lighthouse:v2.2.1-modern
+    image: sigp/lighthouse
     hostname: validator
     depends_on:
       - node2
@@ -128,7 +134,7 @@ services:
         max-file: "1"
 
   validator3:
-    image: sigp/lighthouse:v2.2.1-modern
+    image: sigp/lighthouse
     hostname: validator
     depends_on:
       - node3

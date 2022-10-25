@@ -18,8 +18,10 @@
     "Enabled": true,
     "Host": "0.0.0.0",
     "Port": 8643,
+    "EngineHost": "0.0.0.0",
+    "EnginePort": 8743,
     "WebSocketsPort": 9543,
-    "AdditionalRpcUrls": ["http://0.0.0.0:8743|http;ws|net;eth;subscribe;engine;web3;client|no-auth"]
+    "JwtSecretFile": "./bc/launcher/jwtsecret"
   },
   "Db": {
     "WriteBufferSize": 16000000,
