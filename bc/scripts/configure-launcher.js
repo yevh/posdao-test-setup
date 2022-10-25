@@ -26,16 +26,12 @@ async function main() {
     fs.writeFileSync(dockerComposeYmlPath, dockerComposeYmlContent, 'utf8');
   }
 
-  // Create launcher/config/deploy_block.txt, launcher/config2/deploy_block.txt, launcher/config3/deploy_block.txt
+  // Create launcher/config/deploy_block.txt
   const deployBlock = fs.readFileSync(`${contractsDir}/deploy_block.txt`, 'utf8');
   fs.writeFileSync(`${launcherDir}/config/deploy_block.txt`, deployBlock, 'utf8');
-  fs.writeFileSync(`${launcherDir}/config2/deploy_block.txt`, deployBlock, 'utf8');
-  fs.writeFileSync(`${launcherDir}/config3/deploy_block.txt`, deployBlock, 'utf8');
 
-  // Modify launcher/config/config.yaml, launcher/config2/config.yaml, launcher/config3/config.yaml
+  // Modify launcher/config/config.yaml
   const configYamlPath = `${launcherDir}/config/config.yaml`;
-  const config2YamlPath = `${launcherDir}/config2/config.yaml`;
-  const config3YamlPath = `${launcherDir}/config3/config.yaml`;
   const numberOfValidators = calcNumberOfValidators();
   const chainId = await web3.eth.getChainId();
   const netId = await web3.eth.net.getId();
@@ -49,8 +45,6 @@ async function main() {
   configYamlContent = configYamlContent.replace(/ALTAIR_FORK_VERSION: [a-fA-F0-9x]+/, `ALTAIR_FORK_VERSION: ${web3.utils.padLeft(web3.utils.toHex(chainId + 0x01000000), 8)}`);
   configYamlContent = configYamlContent.replace(/BELLATRIX_FORK_VERSION: [a-fA-F0-9x]+/, `BELLATRIX_FORK_VERSION: ${web3.utils.padLeft(web3.utils.toHex(chainId + 0x02000000), 8)}`);
   fs.writeFileSync(configYamlPath, configYamlContent, 'utf8');
-  fs.writeFileSync(config2YamlPath, configYamlContent, 'utf8');
-  fs.writeFileSync(config3YamlPath, configYamlContent, 'utf8');
 
   // Create key file in launcher/node_db/beacon/network directory
   const node1NetworkDir = `${launcherDir}/node_db/beacon/network`;

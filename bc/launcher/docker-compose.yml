@@ -1,5 +1,36 @@
 version: '3.8'
 services:
+  node0:
+    image: sigp/lighthouse
+    hostname: node0
+    command: |
+      lighthouse beacon_node
+      --testnet-dir /root/sbc/config
+      --port 13001
+      --execution-endpoint http://host.docker.internal:8740
+      --execution-jwt /root/jwtsecret
+      --datadir /home/.eth2/beaconchaindata
+      --http-address 0.0.0.0
+      --http-port 5051
+      --http
+      --disable-upnp
+      --disable-discovery
+      --debug-level debug
+      --merge
+      --suggested-fee-recipient 0x0000000000000000000000000000000000000001
+      --libp2p-addresses /dns/host.docker.internal/tcp/13002/p2p/16Uiu2HAmLCN7qTEBuknCa6R7thyTdUjALjYTpkSsrHhq3FKEL5q9,/dns/host.docker.internal/tcp/13003/p2p/16Uiu2HAm5xMT8ZbN2az5ozTXqmV1JxNh8CM9CkP9BHkPhGAJZMth
+    ports:
+      - '13001:13001'
+      - '5051:5051'
+    volumes:
+      - ./jwtsecret:/root/jwtsecret
+      - ./config:/root/sbc/config
+      - ./node_db:/home/.eth2/beaconchaindata
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "1"
   node1:
     image: sigp/lighthouse
     hostname: node1
@@ -55,7 +86,7 @@ services:
       - '5052:5052'
     volumes:
       - ./jwtsecret:/root/jwtsecret
-      - ./config2:/root/sbc/config
+      - ./config:/root/sbc/config
       - ./node2_db:/home/.eth2/beaconchaindata
     logging:
       driver: "json-file"
@@ -86,7 +117,7 @@ services:
       - '5053:5053'
     volumes:
       - ./jwtsecret:/root/jwtsecret
-      - ./config3:/root/sbc/config
+      - ./config:/root/sbc/config
       - ./node3_db:/home/.eth2/beaconchaindata
     logging:
       driver: "json-file"
