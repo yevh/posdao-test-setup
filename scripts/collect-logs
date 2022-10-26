@@ -35,3 +35,5 @@ if [ -L "$LOGS_DIR/latest" ]; then
     rm "$LOGS_DIR/latest"
 fi
 ln -s "$TIMESTAMP" "$LOGS_DIR/latest"
+
+exit $1
