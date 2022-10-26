@@ -9,6 +9,7 @@ const RandomAuRa = require('../utils/getContract')('RandomAuRa', web3);
 
 const BN = web3.utils.BN;
 const OWNER = constants.OWNER;
+const OWNER_SF = constants.OWNER_SF;
 
 describe('TxPermission test', () => {
   it('TxPermission does not work after the merge', async function() {
@@ -19,11 +20,26 @@ describe('TxPermission test', () => {
 
     // Send some native coins to RandomAuRa contract.
     // This operation is restricted when TxPermission is active
-    const minGasPrice = await calcMinGasPrice(web3);
-    const gasPrice = minGasPrice.mul(new BN(2));
-    const oneCoin = web3.utils.toWei('1', 'ether');
-    const receipt = await SnS(web3, {
+    let minGasPrice = await calcMinGasPrice(web3);
+    let gasPrice = minGasPrice.mul(new BN(2));
+    let oneCoin = web3.utils.toWei('1', 'ether');
+    let receipt = await SnS(web3, {
       from: OWNER,
+      to: RandomAuRa.address,
+      gasLimit: '30000',
+      gasPrice,
+      value: oneCoin
+    });
+
+    expect(receipt.status, 'Transaction was not successful').to.equal(true);
+
+    // Send some native coins to RandomAuRa contract.
+    // This operation is restricted when TxPermission is active
+    minGasPrice = await calcMinGasPrice(web3);
+    gasPrice = minGasPrice.mul(new BN(2));
+    oneCoin = web3.utils.toWei('1', 'ether');
+    receipt = await SnS(web3, {
+      from: OWNER_SF,
       to: RandomAuRa.address,
       gasLimit: '30000',
       gasPrice,

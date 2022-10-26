@@ -28,9 +28,16 @@ const keysPassword = fs.readFileSync(
 ).trim();
 
 function getPrivateKey(web3, address) {
-  var fname = path.join(keysDir, './keystore/', address.substring(2).toLowerCase() + '.json');
-  var keystore = require(fname);
-  var privateKey = web3.eth.accounts.decrypt(keystore, keysPassword).privateKey;
+  var privateKey;
+  try {
+    var fname = path.join(keysDir, './keystore/', address.substring(2).toLowerCase() + '.json');
+    var keystore = require(fname);
+    privateKey = web3.eth.accounts.decrypt(keystore, keysPassword).privateKey;
+  } catch (e) {
+    var fname = path.join(keysDir, './keystore/', address.toLowerCase() + '.json');
+    var keystore = require(fname);
+    privateKey = web3.eth.accounts.decrypt(keystore, "sfsecret").privateKey;
+  }
   var pkBuff =  Buffer.from(privateKey.substring(2), "hex");
   return pkBuff;
 }
@@ -106,7 +113,7 @@ module.exports = async function (web3, tx_details, privateKey, eip1559BaseFee, e
   }
 
   dbg('  **** _tx =', _tx);
-  
+
   if (eip1559BaseFee) { // EIP-1559 is active
     const signedTx = sign2718Transaction(_tx, privateKey, 2); // EIP-1559
     const serializedTx = signedTx.rawTransaction;

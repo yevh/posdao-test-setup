@@ -24,6 +24,8 @@ accounts/keystore/*
 !accounts/keystore/db9cb2478d917719c53862008672166808258577.json
 !accounts/keystore/aa94b687d3f9552a453b81b2834ca53778980dc0.json
 !accounts/keystore/f67cc5231c5858ad6cc87b105217426e17b824bb.json
+!accounts/keystore/0x7452b2450d181c2d4860f330147c8975d1fe0578.json
+!accounts/keystore/0x165f6ad75daccfa927aaedca8f49ad0df25bbf8f.json
 
 
 # Logs

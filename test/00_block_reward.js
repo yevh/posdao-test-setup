@@ -10,43 +10,44 @@ const BlockRewardAuRa = require('../utils/getContract')('BlockRewardAuRa', web3)
 
 const BN = web3.utils.BN;
 const OWNER = constants.OWNER;
+const OWNER_SF = constants.OWNER_SF;
 
 describe('BlockReward tests', () => {
-  it('BlockReward works fine before the merge', async function() {
-    const testAddress = '0x7F57249A03C3d07E4539CFf2E7bcc5b086367001';
-    let block = await web3.eth.getBlock('latest');
-
-    // Make sure the merge transition hasn't happened yet
-    expect(block.step > 0, `Cannot find step field of the block. It seems the merge already happened`).to.equal(true);
-    expect(await web3.eth.getBalance(testAddress) === '0', 'The balance of the test address must be zero').to.equal(true);
-
-    // Allow the owner minting native coins
-    await SnS(web3, {
-      from: OWNER,
-      to: BlockRewardAuRa.address,
-      method: BlockRewardAuRa.instance.methods.setErcToNativeBridgesAllowed([OWNER]),
-      gasPrice: '0' // service transactions must work before the merge
-    });
-
-    // Mint one native coin
-    let minGasPrice = await calcMinGasPrice(web3);
-    let gasPrice = minGasPrice.mul(new BN(2));
-    const oneCoin = web3.utils.toWei('1', 'ether');
-    await SnS(web3, {
-      from: OWNER,
-      to: BlockRewardAuRa.address,
-      method: BlockRewardAuRa.instance.methods.addExtraReceiver(oneCoin, testAddress),
-      gasPrice
-    });
-
-    expect(await web3.eth.getBalance(testAddress) === oneCoin, 'The balance of the test address did not increase').to.equal(true);
-  });
+  // it('BlockReward works fine before the merge', async function() {
+  //   const testAddress = '0x7F57249A03C3d07E4539CFf2E7bcc5b086367001';
+  //   let block = await web3.eth.getBlock('latest');
+  //
+  //   // Make sure the merge transition hasn't happened yet
+  //   expect(block.step > 0, `Cannot find step field of the block. It seems the merge already happened`).to.equal(true);
+  //   expect(await web3.eth.getBalance(testAddress) === '0', 'The balance of the test address must be zero').to.equal(true);
+  //
+  //   // Allow the owner minting native coins
+  //   await SnS(web3, {
+  //     from: OWNER,
+  //     to: BlockRewardAuRa.address,
+  //     method: BlockRewardAuRa.instance.methods.setErcToNativeBridgesAllowed([OWNER]),
+  //     gasPrice: '0' // service transactions must work before the merge
+  //   });
+  //
+  //   // Mint one native coin
+  //   let minGasPrice = await calcMinGasPrice(web3);
+  //   let gasPrice = minGasPrice.mul(new BN(2));
+  //   const oneCoin = web3.utils.toWei('1', 'ether');
+  //   await SnS(web3, {
+  //     from: OWNER,
+  //     to: BlockRewardAuRa.address,
+  //     method: BlockRewardAuRa.instance.methods.addExtraReceiver(oneCoin, testAddress),
+  //     gasPrice
+  //   });
+  //
+  //   expect(await web3.eth.getBalance(testAddress) === oneCoin, 'The balance of the test address did not increase').to.equal(true);
+  // });
 
   it('BlockReward works fine after the merge', async function() {
     const testAddress = '0x6a040F006F9850E6C9bAF8C71c441c234c2D2AAd';
     let block;
 
-    expect(await web3.eth.getBalance(testAddress) === '0', 'The balance of the test address must be zero').to.equal(true);
+    expect(await web3.eth.getBalance(testAddress) === web3.utils.toWei('3', 'ether'), 'The balance of the test address must be zero').to.equal(true);
 
     console.log('    Waiting for the merge transition (TTD 44236707699722000250238698966129867489020)...');
 
@@ -62,14 +63,37 @@ describe('BlockReward tests', () => {
     let minGasPrice = await calcMinGasPrice(web3);
     let gasPrice = minGasPrice.mul(new BN(2));
     const oneCoin = web3.utils.toWei('1', 'ether');
-    await SnS(web3, {
-      from: OWNER,
-      to: BlockRewardAuRa.address,
-      method: BlockRewardAuRa.instance.methods.addExtraReceiver(oneCoin, testAddress),
-      gasPrice
-    });
 
-    expect(await web3.eth.getBalance(testAddress) === oneCoin, 'The balance of the test address did not increase').to.equal(true);
+    // let receipt = await SnS(web3, {
+    //     from: OWNER,
+    //     to: BlockRewardAuRa.address,
+    //     method: BlockRewardAuRa.instance.methods.setErcToNativeBridgesAllowed([OWNER_SF]),
+    //     gasPrice
+    // });
+    // expect(receipt.status, "block reward tx cannot succed with old owner").to.equal(false)
+
+    minGasPrice = await calcMinGasPrice(web3);
+    gasPrice = minGasPrice.mul(new BN(2));
+    // Allow the owner minting native coins
+    receipt = await SnS(web3, {
+      from: OWNER_SF,
+      to: BlockRewardAuRa.address,
+      method: BlockRewardAuRa.instance.methods.setErcToNativeBridgesAllowed([OWNER_SF]),
+      gasPrice: gasPrice
+    });
+    expect(receipt.status, "block reward tx should succed with new owner").to.equal(true)
+
+    minGasPrice = await calcMinGasPrice(web3);
+    gasPrice = minGasPrice.mul(new BN(2));
+    await SnS(web3, {
+        from: OWNER_SF,
+        to: BlockRewardAuRa.address,
+        method: BlockRewardAuRa.instance.methods.addExtraReceiver(oneCoin, testAddress),
+        gasPrice
+    });
+    expect(receipt.status, "block reward tx should succed with new owner").to.equal(true)
+
+    expect(await web3.eth.getBalance(testAddress) === web3.utils.toWei('4', 'ether'), 'The balance of the test address did not increase').to.equal(true);
   });
 });
 
