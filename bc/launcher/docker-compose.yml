@@ -6,26 +6,25 @@ services:
     command: |
       lighthouse beacon_node
       --testnet-dir /root/sbc/config
-      --port 13001
+      --port 13000
       --execution-endpoint http://host.docker.internal:8740
       --execution-jwt /root/jwtsecret
       --datadir /home/.eth2/beaconchaindata
       --http-address 0.0.0.0
-      --http-port 5051
+      --http-port 5050
       --http
       --disable-upnp
       --disable-discovery
       --debug-level debug
-      --merge
-      --suggested-fee-recipient 0x0000000000000000000000000000000000000001
-      --libp2p-addresses /dns/host.docker.internal/tcp/13002/p2p/16Uiu2HAmLCN7qTEBuknCa6R7thyTdUjALjYTpkSsrHhq3FKEL5q9,/dns/host.docker.internal/tcp/13003/p2p/16Uiu2HAm5xMT8ZbN2az5ozTXqmV1JxNh8CM9CkP9BHkPhGAJZMth
+      --target-peers 3
+      --libp2p-addresses /dns/host.docker.internal/tcp/13001/p2p/16Uiu2HAmN5seNB3AYkTo4qRC3oWsPTEGiR68w5suCcuqG3pSf4Ze,/dns/host.docker.internal/tcp/13002/p2p/16Uiu2HAmLCN7qTEBuknCa6R7thyTdUjALjYTpkSsrHhq3FKEL5q9,/dns/host.docker.internal/tcp/13003/p2p/16Uiu2HAm5xMT8ZbN2az5ozTXqmV1JxNh8CM9CkP9BHkPhGAJZMth
     ports:
-      - '13001:13001'
-      - '5051:5051'
+      - '13000:13000'
+      - '5050:5050'
     volumes:
       - ./jwtsecret:/root/jwtsecret
       - ./config:/root/sbc/config
-      - ./node_db:/home/.eth2/beaconchaindata
+      - ./node0_db:/home/.eth2/beaconchaindata
     logging:
       driver: "json-file"
       options:
@@ -47,16 +46,16 @@ services:
       --disable-upnp
       --disable-discovery
       --debug-level debug
-      --merge
       --suggested-fee-recipient 0x0000000000000000000000000000000000000001
-      --libp2p-addresses /dns/host.docker.internal/tcp/13002/p2p/16Uiu2HAmLCN7qTEBuknCa6R7thyTdUjALjYTpkSsrHhq3FKEL5q9,/dns/host.docker.internal/tcp/13003/p2p/16Uiu2HAm5xMT8ZbN2az5ozTXqmV1JxNh8CM9CkP9BHkPhGAJZMth
+      --target-peers 3
+      --libp2p-addresses /dns/host.docker.internal/tcp/13000/p2p/16Uiu2HAmJ7CvpzYR2QYWr3YTQBfeeYCqFVP3Ugm3XmSurG4WJzyC,/dns/host.docker.internal/tcp/13002/p2p/16Uiu2HAmLCN7qTEBuknCa6R7thyTdUjALjYTpkSsrHhq3FKEL5q9,/dns/host.docker.internal/tcp/13003/p2p/16Uiu2HAm5xMT8ZbN2az5ozTXqmV1JxNh8CM9CkP9BHkPhGAJZMth
     ports:
       - '13001:13001'
       - '5051:5051'
     volumes:
       - ./jwtsecret:/root/jwtsecret
       - ./config:/root/sbc/config
-      - ./node_db:/home/.eth2/beaconchaindata
+      - ./node1_db:/home/.eth2/beaconchaindata
     logging:
       driver: "json-file"
       options:
@@ -78,9 +77,9 @@ services:
       --disable-upnp
       --disable-discovery
       --debug-level debug
-      --merge
       --suggested-fee-recipient 0x0000000000000000000000000000000000000002
-      --libp2p-addresses /dns/host.docker.internal/tcp/13001/p2p/16Uiu2HAmN5seNB3AYkTo4qRC3oWsPTEGiR68w5suCcuqG3pSf4Ze,/dns/host.docker.internal/tcp/13003/p2p/16Uiu2HAm5xMT8ZbN2az5ozTXqmV1JxNh8CM9CkP9BHkPhGAJZMth
+      --target-peers 3
+      --libp2p-addresses /dns/host.docker.internal/tcp/13000/p2p/16Uiu2HAmJ7CvpzYR2QYWr3YTQBfeeYCqFVP3Ugm3XmSurG4WJzyC,/dns/host.docker.internal/tcp/13001/p2p/16Uiu2HAmN5seNB3AYkTo4qRC3oWsPTEGiR68w5suCcuqG3pSf4Ze,/dns/host.docker.internal/tcp/13003/p2p/16Uiu2HAm5xMT8ZbN2az5ozTXqmV1JxNh8CM9CkP9BHkPhGAJZMth
     ports:
       - '13002:13002'
       - '5052:5052'
@@ -109,9 +108,9 @@ services:
       --disable-upnp
       --disable-discovery
       --debug-level debug
-      --merge
       --suggested-fee-recipient 0x0000000000000000000000000000000000000003
-      --libp2p-addresses /dns/host.docker.internal/tcp/13001/p2p/16Uiu2HAmN5seNB3AYkTo4qRC3oWsPTEGiR68w5suCcuqG3pSf4Ze,/dns/host.docker.internal/tcp/13002/p2p/16Uiu2HAmLCN7qTEBuknCa6R7thyTdUjALjYTpkSsrHhq3FKEL5q9
+      --target-peers 3
+      --libp2p-addresses /dns/host.docker.internal/tcp/13000/p2p/16Uiu2HAmJ7CvpzYR2QYWr3YTQBfeeYCqFVP3Ugm3XmSurG4WJzyC,/dns/host.docker.internal/tcp/13001/p2p/16Uiu2HAmN5seNB3AYkTo4qRC3oWsPTEGiR68w5suCcuqG3pSf4Ze,/dns/host.docker.internal/tcp/13002/p2p/16Uiu2HAmLCN7qTEBuknCa6R7thyTdUjALjYTpkSsrHhq3FKEL5q9
     ports:
       - '13003:13003'
       - '5053:5053'

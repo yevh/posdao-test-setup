@@ -14,6 +14,9 @@ async function main() {
   if (os.platform() === 'linux') {
     const dockerComposeYmlPath = `${launcherDir}/docker-compose.yml`;
     let dockerComposeYmlContent = fs.readFileSync(dockerComposeYmlPath, 'utf8');
+    dockerComposeYmlContent = dockerComposeYmlContent.replace('node0:', `node0:
+    extra_hosts:
+      - "host.docker.internal:host-gateway"`);
     dockerComposeYmlContent = dockerComposeYmlContent.replace('node1:', `node1:
     extra_hosts:
       - "host.docker.internal:host-gateway"`);
@@ -46,22 +49,28 @@ async function main() {
   configYamlContent = configYamlContent.replace(/BELLATRIX_FORK_VERSION: [a-fA-F0-9x]+/, `BELLATRIX_FORK_VERSION: ${web3.utils.padLeft(web3.utils.toHex(chainId + 0x02000000), 8)}`);
   fs.writeFileSync(configYamlPath, configYamlContent, 'utf8');
 
-  // Create key file in launcher/node_db/beacon/network directory
-  const node1NetworkDir = `${launcherDir}/node_db/beacon/network`;
+  // Create key file in launcher/node0_db/beacon/network directory
+  const node0NetworkDir = `${launcherDir}/node0_db/beacon/network`;
+  fs.mkdirSync(node0NetworkDir, { recursive: true });
+  fs.writeFileSync(`${node0NetworkDir}/key`, Buffer.from('266786bc28821f83f635095e28a308bf8d34da3596c52fd9f6889bf0d173293f', 'hex'), 'binary');
+  // Peer id: 16Uiu2HAmJ7CvpzYR2QYWr3YTQBfeeYCqFVP3Ugm3XmSurG4WJzyC
+
+  // Create key file in launcher/node1_db/beacon/network directory
+  const node1NetworkDir = `${launcherDir}/node1_db/beacon/network`;
   fs.mkdirSync(node1NetworkDir, { recursive: true });
-  fs.writeFileSync(`${node1NetworkDir}/key`, Buffer.from('a970f0c1' + 'a3ffbcc3' + '8a88e985' + 'f68c3f9e' + 'ff52cfb3' + 'cf876ddc' + 'e5ec65ce' + '22c4d0d3', 'hex'), 'binary');
+  fs.writeFileSync(`${node1NetworkDir}/key`, Buffer.from('a970f0c1a3ffbcc38a88e985f68c3f9eff52cfb3cf876ddce5ec65ce22c4d0d3', 'hex'), 'binary');
   // Peer id: 16Uiu2HAmN5seNB3AYkTo4qRC3oWsPTEGiR68w5suCcuqG3pSf4Ze
 
   // Create key file in launcher/node2_db/beacon/network directory
   const node2NetworkDir = `${launcherDir}/node2_db/beacon/network`;
   fs.mkdirSync(node2NetworkDir, { recursive: true });
-  fs.writeFileSync(`${node2NetworkDir}/key`, Buffer.from('c00282b9' + '1d8eec3e' + '4dbd7e7f' + '51662f0b' + 'c540dff8' + 'e71ac862' + 'c80aa2c7' + 'f676be82', 'hex'), 'binary');
+  fs.writeFileSync(`${node2NetworkDir}/key`, Buffer.from('c00282b91d8eec3e4dbd7e7f51662f0bc540dff8e71ac862c80aa2c7f676be82', 'hex'), 'binary');
   // Peer id: 16Uiu2HAmLCN7qTEBuknCa6R7thyTdUjALjYTpkSsrHhq3FKEL5q9
 
   // Create key file in launcher/node3_db/beacon/network directory
   const node3NetworkDir = `${launcherDir}/node3_db/beacon/network`;
   fs.mkdirSync(node3NetworkDir, { recursive: true });
-  fs.writeFileSync(`${node3NetworkDir}/key`, Buffer.from('e76212c4' + '028caed5' + 'aaba9f4b' + '4414da19' + '96881858' + 'f9858cf9' + '5df4cfd0' + 'fbf42e55', 'hex'), 'binary');
+  fs.writeFileSync(`${node3NetworkDir}/key`, Buffer.from('e76212c4028caed5aaba9f4b4414da1996881858f9858cf95df4cfd0fbf42e55', 'hex'), 'binary');
   // Peer id: 16Uiu2HAm5xMT8ZbN2az5ozTXqmV1JxNh8CM9CkP9BHkPhGAJZMth
 
   // Create deposit-script/.env

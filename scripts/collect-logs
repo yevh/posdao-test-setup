@@ -23,9 +23,11 @@ for i in $(seq 0 3); do
 done
 
 if [[ -d ./bc/launcher ]]; then
+    for i in $(seq 0 3); do
+        collect_lh_log "node$i"
+    done
     for i in $(seq 1 3); do
         collect_lh_log "validator$i"
-        collect_lh_log "node$i"
     done
 fi
 
