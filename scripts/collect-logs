@@ -18,4 +18,9 @@ for i in $(seq 0 6); do
     collect_neth_log $i
 done
 
-ln -fs "$TIMESTAMP" "$LOGS_DIR/latest"
+if [ -L "$LOGS_DIR/latest" ]; then
+    rm "$LOGS_DIR/latest"
+fi
+ln -s "$TIMESTAMP" "$LOGS_DIR/latest"
+
+exit $1
