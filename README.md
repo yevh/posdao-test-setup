@@ -53,7 +53,7 @@ To integrate with [Nethermind](https://github.com/NethermindEth/nethermind), the
 ├── nethermind
 ├── posdao-test-setup
 ```
-So there should be two folders on the same level and `posdao-test-setup` will use a binary from the `nethermind` folder, namely the binary is assumed to be at `../nethermind/bin/Nethermind.Runner` relative to `posdao-test-setup` root.
+So there should be two folders on the same level and `posdao-test-setup` will use a binary from the `nethermind` folder, namely the binary is assumed to be at `../nethermind/bin/nethermind` relative to `posdao-test-setup` root.
 
 A pre-compiled binary can be downloaded from the [releases page](https://github.com/NethermindEth/nethermind/releases) (versions >= v1.12.7 are supported). You need to maintain directory structure and naming conventions:
 ```bash
@@ -63,9 +63,9 @@ $ mkdir -p nethermind/bin
 # an example for Linux binary
 $ curl -SfL 'https://github.com/NethermindEth/nethermind/releases/download/1.12.7/nethermind-linux-amd64-1.12.7-3b419f1-20220407.zip' -o nethermind/bin/nethermind.zip
 $ unzip nethermind/bin/nethermind.zip -d nethermind/bin
-$ chmod +x nethermind/bin/Nethermind.Runner
+$ chmod +x nethermind/bin/nethermind
 # check that it works and version is correct (compare the version from the binary with version on the release page)
-$ nethermind/bin/Nethermind.Runner --version
+$ nethermind/bin/nethermind --version
 ```
 
 
