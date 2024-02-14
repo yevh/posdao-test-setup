@@ -12,6 +12,6 @@ else
     extension="nethermind.json"
 fi
 for i in $(seq 0 3); do
-    "$CLIENT" --config "./config/node${i}.${extension}" --HealthChecks.LowStorageCheckAwaitOnStartup=0 >> "./data/node${i}/log" &
+    "$CLIENT" --config "./config/node${i}.${extension}" --HealthChecks.LowStorageSpaceShutdownThreshold=0 >> "./data/node${i}/log" &
     node ./scripts/getReservedPeer.js "$i"
 done
