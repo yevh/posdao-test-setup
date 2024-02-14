@@ -54,6 +54,7 @@ async function main() {
         return;
     }
 
+    console.log('**** Compiling StakingToken contract');
     let compiledContract = compileContract();
     let abi = compiledContract.abi;
     let bytecode = compiledContract.evm.bytecode.object;
