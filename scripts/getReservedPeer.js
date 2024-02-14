@@ -38,7 +38,7 @@ async function main() {
     } catch(e) {
       if (i < maxAttempts) {
         await sleep(500);
-        console.log(`Attempt ${i} failed. Retrying...`);
+        // console.log(`Attempt ${i} failed. Retrying...`);
       } else {
         console.log(`Failed to get enode URL after ${maxAttempts} attempts. Exiting. Error: ${e}`);
       }
