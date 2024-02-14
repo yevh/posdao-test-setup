@@ -36,7 +36,7 @@ async function main() {
 
       break;
     } catch(e) {
-      if (i <= maxAttempts) {
+      if (i < maxAttempts) {
         await sleep(500);
         console.log(`Attempt ${i} failed. Retrying...`);
       } else {
