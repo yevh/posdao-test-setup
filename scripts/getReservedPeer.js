@@ -39,7 +39,7 @@ async function main() {
       if (i <= maxAttempts) {
         await sleep(500);
       } else {
-        console.log(e.message);
+        console.log(`Failed to get enode URL after ${maxAttempts} attempts. Exiting. Error: ${e}`);
       }
     }
   }
