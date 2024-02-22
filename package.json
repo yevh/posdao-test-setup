@@ -12,7 +12,7 @@
     "checkers": "(node scripts/watchOrdinaryNode.js &) && node scripts/deploy-staking-token.js && (node scripts/watchRandomSeed &); ret=$?; bash scripts/collect-logs $ret",
     "cleanup": "bash scripts/stop-test-setup && rm -rf ./accounts ./config ./data && git checkout ./accounts && git checkout ./config && git checkout ./data",
     "get-all-submodules": "git submodule update --init --remote",
-    "compile-posdao-contracts": "cd ./posdao-contracts && npm i && npm run compile",
+    "compile-posdao-contracts": "cd ./posdao-contracts && rm -f ./package-lock.json && npm i && npm run compile",
     "make-spec": ". ./scripts/network-spec && cd ./posdao-contracts && npm i && node ./scripts/make_spec.js && node ../scripts/copy-spec.js",
     "start-test-setup-openethereum": "bash scripts/start-test-setup ../openethereum/target/release/openethereum",
     "start-test-setup-nethermind": "bash scripts/start-test-setup ../nethermind/bin/nethermind",
